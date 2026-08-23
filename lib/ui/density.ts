@@ -1,6 +1,6 @@
 export type Density = "confortavel" | "compacta";
 
-export const DENSITY_STORAGE_KEY = "tecnivel:density";
+export const DENSITY_STORAGE_KEY = "prymeva:density";
 export const DEFAULT_DENSITY: Density = "confortavel";
 
 export function isDensity(value: unknown): value is Density {

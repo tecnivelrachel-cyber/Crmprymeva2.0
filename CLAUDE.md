@@ -1,4 +1,9 @@
-# CLAUDE.md — TecNivel CRM
+# CLAUDE.md — Prymeva CRM
+
+> Produto vendido como instalação exclusiva por cliente (sem multi-tenant,
+> sem plano/assinatura). Este repositório é independente do CRM original da
+> TecNível — não sincronizar de volta para lá. Ver seção "REGRA CRÍTICA" nas
+> instruções de projeto para o histórico dessa separação.
 
 ## Stack
 
@@ -17,11 +22,13 @@ components/layout           sidebar, header, app-shell
 lib/supabase                client (browser) / server / admin (service role)
 lib/auth                    sessão e checagem de perfil
 lib/permissions              hasPermission/hasAnyPermission (espelha o banco)
+lib/company                  company_settings (Configurações > Empresa) + PDFs
+lib/whatsapp                 bridge Baileys (QR), envio, estado de janela de atendimento
 lib/phone                    normalização de telefone BR
 lib/validation                schemas Zod
 types                        tipos do domínio + lista de permissões
 supabase/migrations           schema SQL, RLS, funções auxiliares
-scripts/seed-admin.ts        cria o admin inicial (idempotente)
+scripts/seed-admin.ts        cria o SUPER_ADMIN inicial (idempotente)
 ```
 
 ## Regras
@@ -35,9 +42,14 @@ scripts/seed-admin.ts        cria o admin inicial (idempotente)
 - `whatsapp_message_id` é único — sempre trate conflito como duplicata
   (idempotência do webhook), nunca erro.
 - Regra de janela de atendimento do WhatsApp fica centralizada em
-  `getConversationMessagingState()` (a implementar em `lib/whatsapp`) — não
-  espalhe essa lógica pelos componentes.
+  `lib/whatsapp/messaging-state.ts` — não espalhe essa lógica pelos componentes.
 - Sem módulos financeiros, fiscais ou de estoque.
+- Nenhum dado de empresa/identidade fica hardcoded no código — vem de
+  `company_settings` (`lib/company/settings.ts`), editável em
+  Configurações > Empresa. A marca "Prymeva CRM" em si é fixa (login, PWA).
+- `profiles.role` é só rótulo/proteção do SUPER_ADMIN — a autorização real
+  continua em `is_admin` + `permissions` (ver `lib/permissions`,
+  `lib/authz/guard.ts`). Nunca usar `role` sozinho para checar acesso.
 
 ## Comandos
 
@@ -56,9 +68,9 @@ npm run seed:admin
 - Tipos do banco escritos à mão em `types/database.ts` (não gerados) —
   substituir por `supabase gen types typescript --linked` assim que o projeto
   estiver conectado a uma instância real.
-- Paleta de cores fixada no brief: azul-marinho (sidebar/CTAs principais),
-  azul-bebê (áreas secundárias), laranja (CTAs de destaque) — ver
-  `tailwind.config.ts`.
+- Paleta padrão do produto (violeta → magenta, extraída da identidade oficial
+  do Prymeva CRM) — ver `tailwind.config.ts`. Cada instalação pode sobrepor a
+  cor de destaque em `company_settings.accent_color` sem alterar este arquivo.
 - `getCurrentProfile()` usa `React.cache()` para não duplicar a consulta ao
   perfil entre o layout protegido e cada página.
 

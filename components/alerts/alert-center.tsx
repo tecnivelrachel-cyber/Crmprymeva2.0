@@ -10,7 +10,7 @@ import { subscribeToPush, urlBase64ToArrayBuffer, type PushSubscribeResult } fro
 import { SOUND_PREFERENCE_KEY, ALERTS_ENABLED_KEY, parseSoundPreference, parseAlertsEnabled } from "@/lib/alerts/preferences";
 import { subscribeToPushAction } from "@/app/(crm)/notificacoes/push-actions";
 
-const LEADER_CHANNEL = "tecnivel-alert-leader";
+const LEADER_CHANNEL = "prymeva-alert-leader";
 const LEADER_HEARTBEAT_MS = 2000;
 
 /** Bipe curto e suave via Web Audio — sem arquivo externo, sem som estridente. */

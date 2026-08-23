@@ -15,7 +15,7 @@ export async function testWhatsappConfigAction(rawPhone: string): Promise<Action
     const normalized = normalizeBrazilianPhone(rawPhone);
     if (!normalized) throw new Error("Informe um número de WhatsApp válido (com DDD).");
 
-    const result = await sendWhatsappText({ to: normalized, body: "Teste de configuração do TecNivel CRM." });
+    const result = await sendWhatsappText({ to: normalized, body: "Teste de configuração do Prymeva CRM." });
     if (!result.success) throw new Error(result.error ?? "Falha ao enviar mensagem de teste.");
 
     return { success: true, mocked: result.mocked };

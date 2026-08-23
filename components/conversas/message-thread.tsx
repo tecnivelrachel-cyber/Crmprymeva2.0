@@ -447,7 +447,7 @@ export function MessageThread({
         <div className="w-full shrink-0 border-t border-surface-border bg-white/85 px-6 py-3 backdrop-blur-sm sm:px-8">
           {isInternal && (
             <p className="mb-2 rounded-lg bg-sky-50 px-2.5 py-2 text-xs text-navy-700">
-              Este telefone pertence a outra conta de WhatsApp da TecNivel. A mensagem aparecerá como enviada nesta
+              Este telefone pertence a outra das suas contas de WhatsApp. A mensagem aparecerá como enviada nesta
               caixa e recebida na outra conta. Isso é comportamento normal, não vazamento.
             </p>
           )}

@@ -16,6 +16,7 @@ import {
   Wrench,
   FileText,
   LifeBuoy,
+  Building2,
   LogOut,
   X,
   ChevronDown,
@@ -42,6 +43,7 @@ const ICONS: Record<NavIcon, typeof LayoutDashboard> = {
   Wrench,
   FileText,
   LifeBuoy,
+  Building2,
 };
 
 const WHATSAPP_LABEL: Record<
@@ -58,7 +60,7 @@ const WHATSAPP_LABEL: Record<
   unknown: { label: "WhatsApp: verificando", tone: "neutral" },
 };
 
-const COLLAPSED_KEY = "tecnivel:sidebar-collapsed";
+const COLLAPSED_KEY = "prymeva:sidebar-collapsed";
 
 interface SidebarProps {
   groups: NavGroup[];
@@ -66,9 +68,12 @@ interface SidebarProps {
   userRole: string;
   open: boolean;
   onClose: () => void;
+  /** Nome fantasia da empresa compradora (Configurações > Empresa). null = ainda não configurado, mostra a marca Prymeva. */
+  companyName?: string | null;
+  logoUrl?: string | null;
 }
 
-export function Sidebar({ groups, userName, userRole, open, onClose }: SidebarProps) {
+export function Sidebar({ groups, userName, userRole, open, onClose, companyName, logoUrl }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
@@ -165,17 +170,22 @@ export function Sidebar({ groups, userName, userRole, open, onClose }: SidebarPr
         <div className="flex shrink-0 items-center justify-between gap-2 px-4 py-4">
           <Link href="/dashboard" className="flex min-w-0 items-center gap-2.5" onClick={onClose}>
             <Image
-              src="/brand/logo-tecnivel-symbol-transparent.png"
-              alt="TecNível"
+              src={logoUrl ?? "/brand/prymeva-symbol.png"}
+              alt={companyName ?? "Prymeva CRM"}
               width={36}
-              height={43}
+              height={36}
               priority
-              className="h-9 w-auto shrink-0"
+              className="h-9 w-9 shrink-0 rounded-full object-cover"
             />
             {!collapsed && (
               <span className="min-w-0 md:block">
-                <span className="block truncate text-sm font-semibold text-white">TecNivel</span>
-                <span className="block truncate text-[11px] text-sky-300">Gestão comercial</span>
+                <span className="block truncate text-sm font-semibold text-white">
+                  {companyName ?? "prymeva"}
+                  {!companyName && <span className="text-sky-300">CRM</span>}
+                </span>
+                <span className="block truncate text-[11px] text-sky-300">
+                  {companyName ? "Prymeva CRM" : "Gestão comercial"}
+                </span>
               </span>
             )}
           </Link>

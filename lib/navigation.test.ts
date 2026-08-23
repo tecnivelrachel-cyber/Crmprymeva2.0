@@ -79,5 +79,5 @@ test("rota mais específica vence a mais genérica", () => {
 });
 
 test("rota desconhecida cai no nome do produto, nunca vazio", () => {
-  assert.equal(titleForPath("/rota-inexistente"), "TecNivel CRM");
+  assert.equal(titleForPath("/rota-inexistente"), "Prymeva CRM");
 });

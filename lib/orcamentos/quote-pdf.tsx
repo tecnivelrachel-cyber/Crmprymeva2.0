@@ -1,5 +1,4 @@
 import { Document, Page, View, Text, Image, StyleSheet, Font } from "@react-pdf/renderer";
-import { TECNIVEL_COMPANY } from "./company";
 import { formatBRL, formatDateBR, formatQuantityBR } from "./format";
 import type { QuoteFinancials, QuoteItemDiscountType, QuoteItemType } from "./calculations";
 
@@ -215,10 +214,24 @@ export interface QuotePdfData {
   generalDiscountType: QuoteItemDiscountType;
   generalDiscountValue: number;
   payments: QuotePdfPayment[];
-  /** Buffer PNG do símbolo TecNível (public/brand). */
-  logoBuffer: Buffer;
+  /** Buffer da logomarca enviada em Configurações > Empresa. null = sem logo configurada. */
+  logoBuffer: Buffer | null;
+  /** Dados da empresa emissora (Configurações > Empresa) — nunca hardcoded. */
+  company: QuotePdfCompany;
   /** Prévia gerada no editor, ainda não salva — nunca é o PDF oficial. */
   isPreview?: boolean;
+}
+
+export interface QuotePdfCompany {
+  razaoSocial: string;
+  nomeFantasia: string | null;
+  cnpj: string | null;
+  endereco: string | null;
+  cidadeUf: string | null;
+  cep: string | null;
+  telefone: string | null;
+  email: string | null;
+  site: string | null;
 }
 
 const PAYMENT_METHOD_LABELS: Record<string, string> = {
@@ -264,7 +277,7 @@ function SectionBand({ number, title }: { number: number; title: string }) {
 }
 
 /** Cabeçalho compacto repetido no topo de toda página a partir da 2ª — via `fixed`, renderizado em toda página, mas visualmente discreto para não competir com a capa. */
-function CompactRunningHeader({ quoteLabel }: { quoteLabel: string }) {
+function CompactRunningHeader({ quoteLabel, companyLabel }: { quoteLabel: string; companyLabel: string }) {
   return (
     <View
       fixed
@@ -280,7 +293,7 @@ function CompactRunningHeader({ quoteLabel }: { quoteLabel: string }) {
       }}
       render={({ pageNumber }) => (pageNumber === 1 ? null : (
         <>
-          <Text>TecNível Engenharia de Nível</Text>
+          <Text>{companyLabel}</Text>
           <Text>{quoteLabel}</Text>
         </>
       ))}
@@ -306,10 +319,12 @@ export function QuotePdfDocument(data: QuotePdfData) {
     generalDiscountValue,
     payments,
     logoBuffer,
+    company,
     isPreview = false,
   } = data;
 
   const quoteLabel = typeof quoteNumber === "number" ? `Orçamento nº ${quoteNumber}` : String(quoteNumber);
+  const companyLabel = company.nomeFantasia ?? company.razaoSocial;
   const cityState = [client.city, client.state].filter(Boolean).join(" / ");
   // Endereço completo composto — rua, número, complemento e bairro juntos numa linha só.
   const fullAddress = [client.address, client.addressNumber ? `nº ${client.addressNumber}` : null, client.addressComplement]
@@ -332,26 +347,32 @@ export function QuotePdfDocument(data: QuotePdfData) {
   ].some((v) => v?.trim());
 
   return (
-    <Document title={`${quoteLabel} — TecNível`}>
+    <Document title={`${quoteLabel} — ${companyLabel}`}>
       <Page size="A4" style={styles.page} wrap>
         {isPreview && <Text style={styles.previewWatermark} fixed>PRÉVIA</Text>}
-        <CompactRunningHeader quoteLabel={quoteLabel} />
+        <CompactRunningHeader quoteLabel={quoteLabel} companyLabel={companyLabel} />
 
         {/* CABEÇALHO INSTITUCIONAL — só na primeira página, grande e forte */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            {/* eslint-disable-next-line jsx-a11y/alt-text -- Image aqui é o primitivo do @react-pdf/renderer (PDF), não <img> HTML; não aceita alt. */}
-            <Image src={logoBuffer} style={styles.logo} />
+            {logoBuffer && (
+              // eslint-disable-next-line jsx-a11y/alt-text -- Image aqui é o primitivo do @react-pdf/renderer (PDF), não <img> HTML; não aceita alt.
+              <Image src={logoBuffer} style={styles.logo} />
+            )}
             <View style={styles.companyBlock}>
-              <Text style={styles.companyName}>{TECNIVEL_COMPANY.razaoSocial}</Text>
-              <Text style={styles.companyTagline}>Nome fantasia: {TECNIVEL_COMPANY.nomeFantasia}</Text>
-              <Text style={styles.companyLine}>CNPJ: {TECNIVEL_COMPANY.cnpj}</Text>
-              <Text style={styles.companyLine}>
-                {TECNIVEL_COMPANY.endereco} — {TECNIVEL_COMPANY.cidadeUf} — CEP {TECNIVEL_COMPANY.cep}
-              </Text>
-              <Text style={styles.companyLine}>
-                {TECNIVEL_COMPANY.telefone} | {TECNIVEL_COMPANY.email} | {TECNIVEL_COMPANY.site}
-              </Text>
+              <Text style={styles.companyName}>{company.razaoSocial}</Text>
+              {company.nomeFantasia && <Text style={styles.companyTagline}>Nome fantasia: {company.nomeFantasia}</Text>}
+              {company.cnpj && <Text style={styles.companyLine}>CNPJ: {company.cnpj}</Text>}
+              {(company.endereco || company.cidadeUf || company.cep) && (
+                <Text style={styles.companyLine}>
+                  {[company.endereco, company.cidadeUf, company.cep && `CEP ${company.cep}`].filter(Boolean).join(" — ")}
+                </Text>
+              )}
+              {(company.telefone || company.email || company.site) && (
+                <Text style={styles.companyLine}>
+                  {[company.telefone, company.email, company.site].filter(Boolean).join(" | ")}
+                </Text>
+              )}
             </View>
           </View>
           <View style={styles.headerRight}>

@@ -3,61 +3,68 @@
 @tailwind utilities;
 
 /**
- * TecNível Precision Interface — tokens globais.
+ * Prymeva Cognitive Interface — tokens globais.
  * Fonte única de verdade das cores; o tailwind.config.ts espelha estes valores.
  * Nunca escreva cor hexadecimal solta em componente: use as classes Tailwind
  * (navy/sky/accent/surface/ink) ou estas variáveis.
+ *
+ * Paleta oficial extraída da identidade visual do produto Prymeva CRM
+ * (violeta → magenta). É o tema PADRÃO — a cor de destaque de cada
+ * instalação pode ser sobreposta via --color-accent em Configurações >
+ * Empresa (ver lib/company/settings.ts), sem alterar este arquivo.
  */
 @layer base {
   :root {
-    /* Azul-marinho */
-    --navy-950: #07182d;
-    --navy-900: #0b213d;
-    --navy-800: #123557;
+    /* Violeta */
+    --navy-950: #170f21;
+    --navy-900: #20162d;
+    --navy-800: #3d1782;
 
-    /* Azul de interação */
-    --blue-600: #2674d9;
-    --blue-500: #3b8aec;
-    --blue-100: #dceeff;
-    --blue-50: #f1f7fd;
+    /* Violeta de interação */
+    --blue-600: #7129d4;
+    --blue-500: #a736da;
+    --blue-100: #ede1fb;
+    --blue-50: #f6f1fd;
 
     /* Superfícies */
-    --app-background: #f4f8fc;
+    --app-background: #faf7fd;
     --surface: #ffffff;
-    --surface-soft: #f8fbfe;
-    --surface-selected: #eaf4ff;
+    --surface-soft: #fbf7fe;
+    --surface-selected: #f3e5fa;
 
     /* Texto */
-    --text-primary: #10243e;
-    --text-secondary: #5c718a;
-    --text-muted: #8495a8;
+    --text-primary: #20162d;
+    --text-secondary: #706477;
+    --text-muted: #8f849a;
 
     /* Bordas */
-    --border-default: #dce6f0;
-    --border-subtle: #e9f0f6;
-    --border-selected: #75aeef;
+    --border-default: #e6d9f2;
+    --border-subtle: #f1e9f8;
+    --border-selected: #c79ae8;
 
     /* Ações e estados */
-    --orange: #f47a27;
-    --orange-hover: #e96616;
+    --orange: #df4ba5;
+    --orange-hover: #c93e91;
     --green: #22a66f;
     --red: #dc5b64;
     --yellow: #e5a52a;
-    --purple: #7257c7;
+    --purple: #7129d4;
 
     /* Assinatura laser — apenas detalhes finos */
-    --laser: #e53e35;
-    --laser-soft: rgba(229, 62, 53, 0.12);
+    --laser: #e14b9e;
+    --laser-soft: rgba(225, 75, 158, 0.12);
 
-    /* Identidade TecNível — extraídas da logomarca oficial (public/brand),
-       fonte única para qualquer referência de marca fora do kanban/telas
-       internas (que usam a paleta de interface acima). */
-    --color-primary: #0f2e5c;
-    --color-primary-dark: #081734;
-    --color-secondary: #005cd7;
-    --color-accent: #fe7e01;
-    --color-background: #f4f8fc;
-    --color-border: #dce6f0;
+    /* Identidade Prymeva CRM — extraídas da marca oficial do produto
+       (public/brand/prymeva-symbol.png), fonte única para qualquer
+       referência de marca fora do kanban/telas internas (que usam a
+       paleta de interface acima). Cada instalação pode sobrepor
+       --color-accent com a cor de destaque da empresa compradora. */
+    --color-primary: #6225d5;
+    --color-primary-dark: #3d1782;
+    --color-secondary: #a736da;
+    --color-accent: #df4ba5;
+    --color-background: #faf7fd;
+    --color-border: #e6d9f2;
 
     /* Densidade: alternada em runtime pelo atributo [data-density] */
     --density-row-y: 0.625rem;

@@ -1,8 +1,8 @@
 import { Document, Page, View, Text, Image, StyleSheet, Font } from "@react-pdf/renderer";
-import { TECNIVEL_COMPANY } from "./company";
 import { formatBRL, formatDateBR } from "./format";
 import { STATUS_LABEL } from "@/app/(crm)/orcamentos-emitidos/constants";
 import type { IssuedQuotesReportData } from "@/app/(crm)/orcamentos-emitidos/actions";
+import type { QuotePdfCompany } from "./quote-pdf";
 
 Font.registerHyphenationCallback((word) => [word]);
 
@@ -37,19 +37,22 @@ const COLS = {
   status: { width: "5%" },
 };
 
-export function IssuedQuotesReportDocument(data: IssuedQuotesReportData, logoBuffer: Buffer) {
+export function IssuedQuotesReportDocument(data: IssuedQuotesReportData, logoBuffer: Buffer | null, company: QuotePdfCompany) {
   const { periodLabel, totalIssued, totalApproved, totalPending, totalDeclined, valueQuoted, valueApproved, rows } = data;
+  const companyLabel = company.nomeFantasia ?? company.razaoSocial;
 
   return (
-    <Document title={`Relatório de orçamentos emitidos — ${periodLabel} — TecNível`}>
+    <Document title={`Relatório de orçamentos emitidos — ${periodLabel} — ${companyLabel}`}>
       <Page size="A4" style={styles.page} wrap>
         <View style={styles.header}>
-          {/* eslint-disable-next-line jsx-a11y/alt-text -- primitivo do react-pdf, não aceita alt */}
-          <Image src={logoBuffer} style={styles.logo} />
+          {logoBuffer && (
+            // eslint-disable-next-line jsx-a11y/alt-text -- primitivo do react-pdf, não aceita alt
+            <Image src={logoBuffer} style={styles.logo} />
+          )}
           <View>
             <Text style={styles.title}>Relatório de orçamentos emitidos</Text>
             <Text style={styles.subtitle}>
-              {TECNIVEL_COMPANY.razaoSocial} — Período: {periodLabel}
+              {companyLabel} — Período: {periodLabel}
             </Text>
           </View>
         </View>
@@ -104,7 +107,7 @@ export function IssuedQuotesReportDocument(data: IssuedQuotesReportData, logoBuf
           </View>
         ))}
 
-        <Text style={styles.footer} fixed render={({ pageNumber, totalPages }) => `TecNível — Página ${pageNumber} de ${totalPages}`} />
+        <Text style={styles.footer} fixed render={({ pageNumber, totalPages }) => `${companyLabel} — Página ${pageNumber} de ${totalPages}`} />
       </Page>
     </Document>
   );

@@ -409,7 +409,7 @@ export function WhatsappConnectionPanel({ purpose }: WhatsappConnectionPanelProp
         description={
           confirmMode === "delete"
             ? "Remove as credenciais salvas localmente no Bridge. Será necessário escanear um novo QR Code."
-            : "Desvincula o TecNivel CRM do WhatsApp Business no celular. Será necessário um novo QR Code para reconectar."
+            : "Desvincula o Prymeva CRM do WhatsApp Business no celular. Será necessário um novo QR Code para reconectar."
         }
       >
         <div className="flex justify-end gap-2">

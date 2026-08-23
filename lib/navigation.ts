@@ -15,7 +15,8 @@ export type NavIcon =
   | "BellRing"
   | "Wrench"
   | "FileText"
-  | "LifeBuoy";
+  | "LifeBuoy"
+  | "Building2";
 
 export interface NavItem {
   label: string;
@@ -85,6 +86,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Importar contatos", href: "/importar", icon: "Upload", anyOf: ["import_contacts"] },
       { label: "Usuários", href: "/usuarios", icon: "UserCog", anyOf: ["manage_users"] },
+      { label: "Empresa", href: "/configuracoes/empresa", icon: "Building2", anyOf: ["manage_settings"] },
       {
         label: "Configurações",
         href: "/configuracoes/whatsapp",
@@ -120,5 +122,5 @@ export function titleForPath(pathname: string): string {
   const match = [...NAV_ITEMS]
     .sort((a, b) => b.href.length - a.href.length)
     .find((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
-  return match?.label ?? "TecNivel CRM";
+  return match?.label ?? "Prymeva CRM";
 }

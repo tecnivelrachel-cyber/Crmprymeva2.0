@@ -1,4 +1,4 @@
-const CACHE_NAME = "tecnivel-crm-shell-v1";
+const CACHE_NAME = "prymeva-crm-shell-v1";
 const OFFLINE_URL = "/offline";
 const SHELL_ASSETS = [OFFLINE_URL, "/icons/icon-192.png", "/icons/icon-512.png"];
 
@@ -47,7 +47,7 @@ self.addEventListener("push", (event) => {
       body: payload.body || "Nova mensagem recebida.",
       // A tag agrupa por conversa: mensagens seguidas do mesmo contato
       // substituem a notificação anterior em vez de empilhar.
-      tag: payload.tag || "tecnivel-mensagem",
+      tag: payload.tag || "prymeva-mensagem",
       icon: "/icons/icon-192.png",
       badge: "/icons/icon-192.png",
       data: { conversationId },

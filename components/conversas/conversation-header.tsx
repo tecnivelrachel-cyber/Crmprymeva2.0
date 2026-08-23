@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, ExternalLink, KanbanSquare, PanelRightOpen, PanelRightClose } from "lucide-react";
 import { formatBrazilianPhone } from "@/lib/phone/normalize";
 import { getStagePastelStyles } from "@/lib/tags/stage-visual";
-import { TecNivelAvatar } from "@/components/ui/tecnivel-avatar";
+import { ContactAvatar } from "@/components/ui/contact-avatar";
 import { ScoreBadge } from "@/components/ui/primitives";
 import { classify, CLASSIFICATION_LABELS } from "@/lib/score/calculate";
 import { StagePicker } from "@/components/conversas/stage-picker";
@@ -81,7 +81,7 @@ export function ConversationHeader({
         <ArrowLeft size={18} />
       </Link>
 
-      <TecNivelAvatar customerName={displayName} size={40} />
+      <ContactAvatar customerName={displayName} size={40} />
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">

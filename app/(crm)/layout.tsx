@@ -2,6 +2,7 @@ import { requireProfile } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import { visibleNavGroups } from "@/lib/navigation";
 import { AppShell } from "@/components/layout/app-shell";
+import { getCompanySettings, companyDisplayName } from "@/lib/company/settings";
 import type { AppNotification } from "@/lib/notifications/types";
 
 export default async function CrmLayout({ children }: { children: React.ReactNode }) {
@@ -11,7 +12,7 @@ export default async function CrmLayout({ children }: { children: React.ReactNod
 
   // A RLS de notifications já restringe ao próprio usuário; o filtro por
   // user_id é defesa em profundidade.
-  const [{ data: notifications }, { data: preferences }] = await Promise.all([
+  const [{ data: notifications }, { data: preferences }, company] = await Promise.all([
     supabase
       .from("notifications")
       .select("*")
@@ -19,6 +20,7 @@ export default async function CrmLayout({ children }: { children: React.ReactNod
       .order("created_at", { ascending: false })
       .limit(30),
     supabase.from("notification_preferences").select("muted_types").eq("user_id", profile.id).maybeSingle(),
+    getCompanySettings(),
   ]);
 
   return (
@@ -29,6 +31,8 @@ export default async function CrmLayout({ children }: { children: React.ReactNod
       userId={profile.id}
       notifications={(notifications ?? []) as AppNotification[]}
       mutedTypes={preferences?.muted_types ?? []}
+      companyName={companyDisplayName(company)}
+      companyLogoUrl={company.logo_url}
     >
       {children}
     </AppShell>

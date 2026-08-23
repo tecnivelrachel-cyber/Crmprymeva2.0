@@ -4,6 +4,14 @@
 
 import type { PermissionsMap } from "./permissions";
 
+/**
+ * Rótulo de papel (ver 028_company_settings_and_super_admin.sql). A
+ * AUTORIZAÇÃO real continua em is_admin + permissions — role nunca deve ser
+ * usado sozinho para checar acesso, só para UI/rótulos e para a proteção do
+ * super_admin contra remoção acidental.
+ */
+export type ProfileRole = "super_admin" | "admin" | "manager" | "seller";
+
 export interface Profile {
   id: string;
   full_name: string;
@@ -13,10 +21,41 @@ export interface Profile {
   is_admin: boolean;
   is_active: boolean;
   permissions: PermissionsMap;
+  role: ProfileRole;
   /** 011_post_sale.sql — 'post_sale_only' restringe o usuário ao módulo de Pós-venda (ver lib/access-scope.ts). null = acesso normal (Comercial). */
   access_scope: "post_sale_only" | null;
   last_login_at: string | null;
   created_at: string;
+  updated_at: string;
+}
+
+/**
+ * 028_company_settings_and_super_admin.sql — identidade da empresa
+ * compradora desta instalação (linha única, sem multi-tenant). Editável em
+ * Configurações > Empresa. Nunca confundir com a marca do produto
+ * ("Prymeva CRM"), que é fixa.
+ */
+export interface CompanySettings {
+  id: true;
+  razao_social: string | null;
+  nome_fantasia: string | null;
+  cnpj: string | null;
+  inscricao_estadual: string | null;
+  telefone: string | null;
+  whatsapp: string | null;
+  email: string | null;
+  site: string | null;
+  endereco: string | null;
+  numero: string | null;
+  complemento: string | null;
+  bairro: string | null;
+  cidade: string | null;
+  estado: string | null;
+  cep: string | null;
+  logo_url: string | null;
+  accent_color: string | null;
+  observacoes: string | null;
+  updated_by: string | null;
   updated_at: string;
 }
 

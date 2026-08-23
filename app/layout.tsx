@@ -6,12 +6,12 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "TecNivel CRM",
-  description: "Gestão comercial, atendimento e relacionamento em um só lugar.",
+  title: "Prymeva CRM",
+  description: "Toda a jornada do cliente em um só lugar.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#17304F",
+  themeColor: "#6225D5",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

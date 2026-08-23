@@ -17,10 +17,22 @@ interface AppShellProps {
   userId: string;
   notifications: AppNotification[];
   mutedTypes: string[];
+  companyName?: string | null;
+  companyLogoUrl?: string | null;
   children: React.ReactNode;
 }
 
-export function AppShell({ groups, userName, userRole, userId, notifications, mutedTypes, children }: AppShellProps) {
+export function AppShell({
+  groups,
+  userName,
+  userRole,
+  userId,
+  notifications,
+  mutedTypes,
+  companyName,
+  companyLogoUrl,
+  children,
+}: AppShellProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [density, setDensity] = useState<Density>(DEFAULT_DENSITY);
@@ -62,6 +74,8 @@ export function AppShell({ groups, userName, userRole, userId, notifications, mu
           userRole={userRole}
           open={menuOpen}
           onClose={() => setMenuOpen(false)}
+          companyName={companyName}
+          logoUrl={companyLogoUrl}
         />
         {/* min-h-screen força uma altura mínima de uma tela inteira — em
             /conversas isso brigava com a altura travada (h-dvh) do

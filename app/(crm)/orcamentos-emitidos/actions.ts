@@ -204,12 +204,12 @@ export async function exportIssuedQuotesReportPdfAction(
     const reportResult = await buildIssuedQuotesReportAction(filters, periodLabel);
     if ("error" in reportResult) return reportResult;
 
-    const { TECNIVEL_LOGO_BASE64 } = await import("@/lib/orcamentos/logo-base64");
+    const { getQuotePdfCompany } = await import("@/lib/company/pdf");
     const { IssuedQuotesReportDocument } = await import("@/lib/orcamentos/report-pdf");
     const { renderToBuffer } = await import("@react-pdf/renderer");
 
-    const logoBuffer = Buffer.from(TECNIVEL_LOGO_BASE64, "base64");
-    const buffer = await renderToBuffer(IssuedQuotesReportDocument(reportResult.data, logoBuffer));
+    const { company, logoBuffer } = await getQuotePdfCompany();
+    const buffer = await renderToBuffer(IssuedQuotesReportDocument(reportResult.data, logoBuffer, company));
     return { success: true, data: { base64: buffer.toString("base64") } };
   } catch (err) {
     return toActionError(err, "Não foi possível gerar o PDF do relatório.");

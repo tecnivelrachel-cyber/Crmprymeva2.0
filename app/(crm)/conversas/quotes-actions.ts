@@ -13,7 +13,7 @@ import { computeQuoteFinancials, computeItemSubtotal, type QuoteItemType } from 
 import { calculateInstallmentDifference, installmentsMatchTotal } from "@/lib/orcamentos/payment-schedule";
 import { buildQuotePdfPath, uploadQuotePdf, createQuotePdfSignedUrl } from "@/lib/orcamentos/quote-storage";
 import { QuotePdfDocument, type QuotePdfData } from "@/lib/orcamentos/quote-pdf";
-import { TECNIVEL_LOGO_BASE64 } from "@/lib/orcamentos/logo-base64";
+import { getQuotePdfCompany } from "@/lib/company/pdf";
 import { buildOutboundMediaPath } from "@/lib/whatsapp/media-path";
 import { uploadMediaObject, createMediaSignedUrl } from "@/lib/whatsapp/media-storage";
 import { resolveCommercialAccountId } from "@/lib/whatsapp/resolve-account";
@@ -450,13 +450,6 @@ export async function duplicateQuoteAction(quoteId: string): Promise<ActionResul
   }
 }
 
-// Embutido em base64 (em vez de lido de public/) porque o filesystem da
-// função serverless da Vercel não inclui public/ no mesmo caminho relativo
-// do dev local — um fs.readFile aqui falhava em produção com ENOENT.
-function readLogoBuffer(): Buffer {
-  return Buffer.from(TECNIVEL_LOGO_BASE64, "base64");
-}
-
 /**
  * Monta os dados do PDF a partir do orçamento + itens + parcelas já
  * carregados. Dados do cliente vêm do SNAPSHOT gravado em quotes.client_*
@@ -493,6 +486,7 @@ async function buildQuotePdfData(quoteId: string): Promise<QuotePdfData> {
   }));
 
   const financials = computeQuoteFinancials(sortedItems, quote.discount_type, quote.discount, quote.freight);
+  const { company, logoBuffer } = await getQuotePdfCompany();
 
   const payments = ((quote.quote_payments ?? []) as QuotePayment[])
     .slice()
@@ -536,7 +530,8 @@ async function buildQuotePdfData(quoteId: string): Promise<QuotePdfData> {
     generalDiscountValue: quote.discount,
     items,
     payments,
-    logoBuffer: readLogoBuffer(),
+    logoBuffer,
+    company,
   };
 }
 
@@ -565,6 +560,7 @@ export async function previewQuotePdfAction(
 
     const validItems = items.filter((i) => i.name.trim() && i.quantity > 0);
     const financials = computeQuoteFinancials(validItems, fields.discount_type, fields.discount, fields.freight);
+    const { company, logoBuffer } = await getQuotePdfCompany();
 
     const data: QuotePdfData = {
       quoteNumber: quoteNumberLabel,
@@ -608,7 +604,8 @@ export async function previewQuotePdfAction(
         subtotal: computeItemSubtotal(item.quantity, item.unit_price, item.discount_type, item.discount_value),
       })),
       payments: payments.filter((p) => p.amount > 0),
-      logoBuffer: readLogoBuffer(),
+      logoBuffer,
+      company,
       isPreview: true,
     };
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { formatBrazilianPhone } from "@/lib/phone/normalize";
 import { getStagePastelStyles, POST_SALE_FALLBACK_COLOR } from "@/lib/tags/stage-visual";
-import { TecNivelAvatar } from "@/components/ui/tecnivel-avatar";
+import { ContactAvatar } from "@/components/ui/contact-avatar";
 import { Badge } from "@/components/ui/badge";
 import { InternalNumberBadge } from "@/components/whatsapp/internal-number-badge";
 import { ProcessLinkActions } from "./process-link-actions";
@@ -54,7 +54,7 @@ export function PostSaleConversationHeader({
       style={{ backgroundColor: pastel.background, borderBottomColor: pastel.border }}
     >
       <div className="flex min-w-0 items-center gap-3">
-        <TecNivelAvatar customerName={name} size={36} />
+        <ContactAvatar customerName={name} size={36} />
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
             <p className="truncate text-sm font-medium text-ink-900">{name}</p>

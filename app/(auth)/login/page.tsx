@@ -60,23 +60,18 @@ function LoginForm() {
       <div className="w-full max-w-sm animate-fade-in">
         <div className="mb-8 text-center">
           <Image
-            src="/brand/logo-tecnivel-symbol.png"
-            alt="TecNível"
-            width={80}
-            height={95}
+            src="/brand/prymeva-symbol.png"
+            alt="Prymeva CRM"
+            width={72}
+            height={72}
             priority
-            className="mx-auto mb-4 h-20 w-auto"
+            className="mx-auto mb-3 h-16 w-auto"
           />
-          <Image
-            src="/brand/logo-tecnivel-wordmark.png"
-            alt="TecNível"
-            width={220}
-            height={38}
-            priority
-            className="mx-auto h-8 w-auto"
-          />
+          <p className="text-2xl font-semibold tracking-tight text-navy-900">
+            prymeva<span className="text-navy-400">CRM</span>
+          </p>
           <p className="mt-2 text-sm text-ink-500">
-            Gestão comercial, atendimento e relacionamento em um só lugar.
+            Toda a jornada do cliente em um só lugar.
           </p>
         </div>
 
@@ -91,7 +86,7 @@ function LoginForm() {
                 id="email"
                 type="email"
                 autoComplete="email"
-                placeholder="voce@tecnivel.com.br"
+                placeholder="voce@suaempresa.com.br"
                 {...register("email")}
               />
               {errors.email && <p className="text-xs text-danger">{errors.email.message}</p>}

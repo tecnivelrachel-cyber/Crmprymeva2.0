@@ -11,7 +11,7 @@ import { Select } from "@/components/ui/select";
 import { Dialog } from "@/components/ui/dialog";
 import { formatBrazilianPhone } from "@/lib/phone/normalize";
 import { StageTag, ManualTag } from "@/components/conversas/stage-tag";
-import { TecNivelAvatar } from "@/components/ui/tecnivel-avatar";
+import { ContactAvatar } from "@/components/ui/contact-avatar";
 import { ScoreBadge } from "@/components/ui/primitives";
 import { classify, CLASSIFICATION_LABELS } from "@/lib/score/calculate";
 import {
@@ -559,7 +559,7 @@ export function ConversationList({
                     }`}
                   >
                     <div className="flex gap-2">
-                      <TecNivelAvatar customerName={displayName} size={32} />
+                      <ContactAvatar customerName={displayName} size={32} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
                           <p className={`truncate text-sm text-ink-900 ${selected ? "font-semibold" : "font-medium"}`}>

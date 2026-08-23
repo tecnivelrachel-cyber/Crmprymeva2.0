@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Search, MessageSquareOff, Plus } from "lucide-react";
 import { formatBrazilianPhone } from "@/lib/phone/normalize";
-import { TecNivelAvatar } from "@/components/ui/tecnivel-avatar";
+import { ContactAvatar } from "@/components/ui/contact-avatar";
 import { useRealtime } from "@/components/realtime/realtime-provider";
 import {
   applyIncomingMessage,
@@ -156,7 +156,7 @@ export function PostSaleConversationList({
                   selectedId === c.id ? "bg-sky-50" : ""
                 }`}
               >
-                <TecNivelAvatar customerName={name} size={38} />
+                <ContactAvatar customerName={name} size={38} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="flex min-w-0 items-center gap-1.5">

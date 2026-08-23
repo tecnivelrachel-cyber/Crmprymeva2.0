@@ -1,12 +1,17 @@
 import type { Config } from "tailwindcss";
 
 /**
- * TecNível Precision Interface.
+ * Prymeva Cognitive Interface.
  *
  * Os NOMES das escalas foram mantidos (navy/sky/accent/surface/ink) para que
- * toda a UI existente herde a nova identidade sem reescrever componente por
- * componente — o que mudou foram os VALORES, alinhados aos tokens oficiais
- * declarados em app/globals.css.
+ * toda a UI existente herde a identidade da marca sem reescrever componente
+ * por componente — o que muda são os VALORES, alinhados à identidade oficial
+ * do Prymeva CRM (violeta → magenta) e espelhados em app/globals.css.
+ *
+ * Esta é a paleta PADRÃO do produto. Cada instalação vendida a um cliente
+ * poderá sobrepor sua própria cor de destaque em Configurações > Empresa
+ * (ver lib/company/settings.ts) sem precisar editar este arquivo — a marca
+ * "Prymeva CRM" em si permanece fixa.
  */
 const config: Config = {
   darkMode: "class",
@@ -14,52 +19,52 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Azul-marinho — sidebar, títulos e botões principais
+        // Violeta — sidebar, títulos e botões principais
         navy: {
-          50: "#F1F7FD",
-          100: "#DCEEFF",
-          400: "#3B8AEC",
-          600: "#2674D9",
-          700: "#123557",
-          800: "#0B213D",
-          900: "#07182D",
+          50: "#F6F1FD",
+          100: "#EDE1FB",
+          400: "#A736DA",
+          600: "#7129D4",
+          700: "#6225D5",
+          800: "#3D1782",
+          900: "#20162D",
         },
-        // Azul claro — superfícies secundárias e seleção
+        // Lilás claro — superfícies secundárias e seleção
         sky: {
-          50: "#F1F7FD",
-          100: "#DCEEFF",
-          200: "#C4E0FB",
-          300: "#75AEEF",
+          50: "#F8F1FD",
+          100: "#EEE1FA",
+          200: "#E2C9F5",
+          300: "#C79AE8",
         },
-        // Laranja — somente CTAs comerciais importantes
+        // Magenta — somente CTAs comerciais importantes
         accent: {
-          400: "#F79557",
-          500: "#F47A27",
-          600: "#E96616",
+          400: "#E672B8",
+          500: "#DF4BA5",
+          600: "#C93E91",
         },
         surface: {
-          DEFAULT: "#F4F8FC",
+          DEFAULT: "#FAF7FD",
           card: "#FFFFFF",
-          border: "#DCE6F0",
-          subtle: "#E9F0F6",
-          muted: "#F8FBFE",
-          selected: "#EAF4FF",
+          border: "#E6D9F2",
+          subtle: "#F1E9F8",
+          muted: "#FBF7FE",
+          selected: "#F3E5FA",
         },
         ink: {
-          900: "#10243E",
-          700: "#3B5470",
-          500: "#5C718A",
-          400: "#8495A8",
-          300: "#A9B7C6",
+          900: "#20162D",
+          700: "#4A3B57",
+          500: "#706477",
+          400: "#8F849A",
+          300: "#B6ABBE",
         },
         success: "#22A66F",
         warning: "#E5A52A",
         danger: "#DC5B64",
-        purple: "#7257C7",
+        purple: "#7129D4",
         // Assinatura laser — só em detalhes finos, nunca em áreas grandes
         laser: {
-          DEFAULT: "#E53E35",
-          soft: "rgba(229, 62, 53, 0.12)",
+          DEFAULT: "#E14B9E",
+          soft: "rgba(225, 75, 158, 0.12)",
         },
       },
       fontFamily: {

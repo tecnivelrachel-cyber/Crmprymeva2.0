@@ -270,3 +270,35 @@ export const csvImportRowSchema = z.object({
 });
 
 export type CsvImportRow = z.infer<typeof csvImportRowSchema>;
+
+/** Campo de texto opcional vindo de um <input>, onde "vazio" chega como "". */
+const optionalText = z.preprocess((v) => (v === "" ? null : v), z.string().nullable().optional());
+
+export const companySettingsSchema = z.object({
+  razao_social: optionalText,
+  nome_fantasia: optionalText,
+  cnpj: optionalText,
+  inscricao_estadual: optionalText,
+  telefone: optionalText,
+  whatsapp: optionalText,
+  email: z.preprocess((v) => (v === "" ? null : v), z.string().email("E-mail inválido").nullable().optional()),
+  site: optionalText,
+  endereco: optionalText,
+  numero: optionalText,
+  complemento: optionalText,
+  bairro: optionalText,
+  cidade: optionalText,
+  estado: optionalText,
+  cep: optionalText,
+  accent_color: z.preprocess(
+    (v) => (v === "" ? null : v),
+    z
+      .string()
+      .regex(/^#[0-9A-Fa-f]{6}$/, "Use uma cor no formato #RRGGBB")
+      .nullable()
+      .optional()
+  ),
+  observacoes: optionalText,
+});
+
+export type CompanySettingsInput = z.infer<typeof companySettingsSchema>;

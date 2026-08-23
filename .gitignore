@@ -1,0 +1,18 @@
+node_modules
+.next
+.env.local
+.env*.local
+.vercel
+*.tsbuildinfo
+.DS_Store
+npm-debug.log*
+.turbo
+
+.vercel
+.env*
+
+# Sessão do WhatsApp Bridge (Baileys) — nunca deve ir para o Git nem para o CRM.
+whatsapp-auth/
+auth_info_baileys/
+*.session
+*.session.json

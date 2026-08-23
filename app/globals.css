@@ -1,0 +1,245 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * TecNível Precision Interface — tokens globais.
+ * Fonte única de verdade das cores; o tailwind.config.ts espelha estes valores.
+ * Nunca escreva cor hexadecimal solta em componente: use as classes Tailwind
+ * (navy/sky/accent/surface/ink) ou estas variáveis.
+ */
+@layer base {
+  :root {
+    /* Azul-marinho */
+    --navy-950: #07182d;
+    --navy-900: #0b213d;
+    --navy-800: #123557;
+
+    /* Azul de interação */
+    --blue-600: #2674d9;
+    --blue-500: #3b8aec;
+    --blue-100: #dceeff;
+    --blue-50: #f1f7fd;
+
+    /* Superfícies */
+    --app-background: #f4f8fc;
+    --surface: #ffffff;
+    --surface-soft: #f8fbfe;
+    --surface-selected: #eaf4ff;
+
+    /* Texto */
+    --text-primary: #10243e;
+    --text-secondary: #5c718a;
+    --text-muted: #8495a8;
+
+    /* Bordas */
+    --border-default: #dce6f0;
+    --border-subtle: #e9f0f6;
+    --border-selected: #75aeef;
+
+    /* Ações e estados */
+    --orange: #f47a27;
+    --orange-hover: #e96616;
+    --green: #22a66f;
+    --red: #dc5b64;
+    --yellow: #e5a52a;
+    --purple: #7257c7;
+
+    /* Assinatura laser — apenas detalhes finos */
+    --laser: #e53e35;
+    --laser-soft: rgba(229, 62, 53, 0.12);
+
+    /* Identidade TecNível — extraídas da logomarca oficial (public/brand),
+       fonte única para qualquer referência de marca fora do kanban/telas
+       internas (que usam a paleta de interface acima). */
+    --color-primary: #0f2e5c;
+    --color-primary-dark: #081734;
+    --color-secondary: #005cd7;
+    --color-accent: #fe7e01;
+    --color-background: #f4f8fc;
+    --color-border: #dce6f0;
+
+    /* Densidade: alternada em runtime pelo atributo [data-density] */
+    --density-row-y: 0.625rem;
+    --density-card-p: 1rem;
+    --density-gap: 0.75rem;
+
+    /* Durações padronizadas */
+    --duration-base: 180ms;
+    --duration-menu: 140ms;
+    --duration-panel: 220ms;
+    --duration-modal: 200ms;
+  }
+
+  /* Densidade compacta — reduz respiro sem apertar a área de toque */
+  :root[data-density="compacta"] {
+    --density-row-y: 0.375rem;
+    --density-card-p: 0.75rem;
+    --density-gap: 0.5rem;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-surface text-ink-900;
+  }
+
+  ::selection {
+    @apply bg-sky-200 text-navy-800;
+  }
+
+  /* Foco visível e consistente em tudo que recebe teclado */
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--border-selected);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbars finas e discretas */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-default) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--border-default);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-muted);
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  /* Densidade aplicável em listas e cards */
+  .density-row {
+    padding-top: var(--density-row-y);
+    padding-bottom: var(--density-row-y);
+  }
+
+  .density-card {
+    padding: var(--density-card-p);
+  }
+
+  .density-gap {
+    gap: var(--density-gap);
+  }
+
+  /* Assinatura laser: linha fina que atravessa o elemento (carregamento) */
+  .laser-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .laser-line::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, var(--laser), transparent);
+    opacity: 0.5;
+    animation: laser-sweep 1.2s ease-in-out infinite;
+  }
+
+  /* Resposta tátil imediata ao clique, sem biblioteca de animação */
+  .press {
+    transition: transform var(--duration-base) ease-out, box-shadow var(--duration-base) ease-out,
+      background-color var(--duration-base) ease-out, border-color var(--duration-base) ease-out;
+  }
+
+  .press:active {
+    transform: scale(0.98);
+  }
+
+  .lift {
+    transition: transform var(--duration-base) ease-out, box-shadow var(--duration-base) ease-out,
+      border-color var(--duration-base) ease-out;
+  }
+
+  .lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Fundo da central de mensagens: azul-bebê suave com feixes de luz muito
+     discretos atravessando o fundo — só ambientação, nunca sobre o texto
+     (z-index negativo, pointer-events desligado). Duas faixas em durações
+     diferentes para não parecerem sincronizadas. prefers-reduced-motion já
+     é tratado de forma global logo abaixo (congela a animação em vez de
+     escondê-la, então o gradiente estático continua visível). */
+  .chat-ambient {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    /* Textura em pontos bem sutil (referência: fundo estampado do WhatsApp),
+       sobre o mesmo degradê azul-bebê que já existia — nunca escura o
+       suficiente para competir com o texto dos balões. */
+    background-image: radial-gradient(circle, rgba(15, 46, 92, 0.16) 1.5px, transparent 1.5px),
+      linear-gradient(180deg, var(--blue-50), var(--surface-soft) 60%);
+    background-size: 18px 18px, auto;
+  }
+
+  .chat-ambient::before,
+  .chat-ambient::after {
+    content: "";
+    position: absolute;
+    inset: -20% -15%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 42%, rgba(59, 138, 236, 0.05) 50%, transparent 58%);
+    animation: chat-ambient-sweep 16s ease-in-out infinite;
+  }
+
+  .chat-ambient::after {
+    background: linear-gradient(115deg, transparent 58%, rgba(229, 62, 53, 0.03) 65%, transparent 72%);
+    animation-duration: 21s;
+    animation-delay: -7s;
+  }
+
+  @keyframes chat-ambient-sweep {
+    0%,
+    100% {
+      transform: translateX(-12%);
+    }
+    50% {
+      transform: translateX(12%);
+    }
+  }
+}
+
+/* Quem pediu menos movimento recebe menos movimento — inclusive nas
+   animações utilitárias acima, não só nas do Tailwind. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .lift:hover {
+    transform: none;
+  }
+
+  .press:active {
+    transform: none;
+  }
+}

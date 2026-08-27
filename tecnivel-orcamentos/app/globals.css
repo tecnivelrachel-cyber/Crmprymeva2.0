@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #f6f8fb;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  /* Barra inferior fixa + área segura do iPhone. */
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 2rem;
+  }
+}
+
+@layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Impressão: só o documento vai para o papel. Menu, barra inferior, botões e
+   demais elementos do sistema recebem .no-print e somem.
+   --------------------------------------------------------------------------- */
+
+@media print {
+  body {
+    background: #fff;
+    padding: 0;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-sheet {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border: 0;
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Nunca quebrar uma linha da tabela de produtos no meio. */
+  tr,
+  .avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  a[href]::after {
+    content: '';
+  }
+}
+
+@page {
+  size: A4;
+  margin: 14mm 12mm;
+}
+
+/* Impressão térmica: bobina de 58/80mm, sem cor de fundo e fonte monoespaçada. */
+.thermal {
+  width: 80mm;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #000;
+}
+
+@media print {
+  .thermal-page .print-sheet {
+    width: 80mm;
+  }
+}
